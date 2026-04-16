@@ -3,7 +3,6 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
-import ImageUpload from './ImageUpload';
 
 interface Props {
   content: string;
@@ -21,7 +20,7 @@ const RichTextEditor = ({ content, onChange }: Props) => {
         openOnClick: false,
       }),
       Placeholder.configure({
-        placeholder: 'Write something amazing...',
+        placeholder: 'Start writing your story...',
       }),
     ],
     content,
@@ -30,7 +29,7 @@ const RichTextEditor = ({ content, onChange }: Props) => {
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-invert max-w-none focus:outline-none min-h-[200px] p-4',
+        class: 'prose max-w-none focus:outline-none min-h-[250px] p-4 text-slate-700',
       },
     },
   });
@@ -39,38 +38,32 @@ const RichTextEditor = ({ content, onChange }: Props) => {
     return null;
   }
 
-  const addImage = (url: string) => {
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
-
   return (
-    <div className="border border-slate-700 rounded-lg overflow-hidden bg-slate-900">
-      <div className="flex flex-wrap gap-1 p-2 border-b border-slate-700 bg-slate-800/50">
+    <div className="border border-slate-300 rounded-lg overflow-hidden bg-white">
+      <div className="flex flex-wrap gap-1 p-2 border-b border-slate-200 bg-slate-50">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded text-sm ${
-            editor.isActive('bold') ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+          className={`p-2 rounded text-sm font-semibold ${
+            editor.isActive('bold') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          <strong>B</strong>
+          B
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded text-sm ${
-            editor.isActive('italic') ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+          className={`p-2 rounded text-sm italic ${
+            editor.isActive('italic') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          <em>I</em>
+          I
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`p-2 rounded text-sm ${
-            editor.isActive('heading', { level: 2 }) ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+          className={`p-2 rounded text-sm font-semibold ${
+            editor.isActive('heading', { level: 2 }) ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           H2
@@ -78,8 +71,8 @@ const RichTextEditor = ({ content, onChange }: Props) => {
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={`p-2 rounded text-sm ${
-            editor.isActive('heading', { level: 3 }) ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+          className={`p-2 rounded text-sm font-semibold ${
+            editor.isActive('heading', { level: 3 }) ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           H3
@@ -88,30 +81,39 @@ const RichTextEditor = ({ content, onChange }: Props) => {
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`p-2 rounded text-sm ${
-            editor.isActive('bulletList') ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+            editor.isActive('bulletList') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          • List
+          •
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`p-2 rounded text-sm ${
-            editor.isActive('orderedList') ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+            editor.isActive('orderedList') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          1. List
+          1.
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`p-2 rounded text-sm ${
-            editor.isActive('codeBlock') ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
+          className={`p-2 rounded text-sm font-mono ${
+            editor.isActive('codeBlock') ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           {'</>'}
         </button>
-        <ImageUpload onUpload={addImage} />
+        <button
+          type="button"
+          onClick={() => {
+            const url = window.prompt('Enter image URL:');
+            if (url) editor.chain().focus().setImage({ src: url }).run();
+          }}
+          className="p-2 rounded text-sm text-slate-600 hover:bg-slate-100"
+        >
+          IMG
+        </button>
       </div>
       <EditorContent editor={editor} />
     </div>

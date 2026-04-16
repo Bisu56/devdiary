@@ -35,26 +35,28 @@ const CommentItem = ({ comment, postId, onReplyAdded }: Props) => {
   };
 
   return (
-    <div className="border-l-2 border-slate-700 pl-4 mb-6">
+    <div className="border-l-2 border-slate-200 pl-4 py-2">
       <div className="flex items-start gap-3">
-        <div className="w-8 h-8 bg-cyan-900 rounded-full flex items-center justify-center text-cyan-400 font-medium flex-shrink-0">
+        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-medium flex-shrink-0">
           {comment.author.name[0].toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-white">{comment.author.name}</div>
-          <div className="text-xs text-slate-500">
-            {new Date(comment.createdAt).toLocaleDateString()}
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-medium text-slate-900">{comment.author.name}</span>
+            <span className="text-xs text-slate-400">
+              {new Date(comment.createdAt).toLocaleDateString()}
+            </span>
           </div>
-          <p className="mt-2 text-slate-300">{comment.content}</p>
+          <p className="text-slate-600">{comment.content}</p>
 
-          <div className="flex gap-4 mt-3 text-sm">
+          <div className="flex items-center gap-4 mt-2 text-sm">
             <button 
               onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-cyan-400 hover:underline"
+              className="text-slate-500 hover:text-slate-700"
             >
               Reply
             </button>
-            <span className="text-slate-500">{comment.likes} likes</span>
+            <span className="text-slate-400">{comment.likes} likes</span>
           </div>
 
           {showReplyForm && isAuthenticated && (
@@ -62,20 +64,20 @@ const CommentItem = ({ comment, postId, onReplyAdded }: Props) => {
               <textarea
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
-                className="w-full p-3 border border-slate-700 rounded-lg bg-slate-900 text-white"
+                className="input resize-none"
                 placeholder="Write your reply..."
                 rows={3}
               />
-              <div className="flex gap-2 mt-2">
+              <div className="flex items-center gap-2 mt-2">
                 <button 
                   onClick={handleReply}
-                  className="bg-cyan-600 text-white px-4 py-1.5 rounded-md text-sm hover:bg-cyan-500"
+                  className="btn btn-primary text-sm py-1.5"
                 >
-                  Post Reply
+                  Reply
                 </button>
                 <button 
                   onClick={() => setShowReplyForm(false)}
-                  className="text-slate-500 text-sm"
+                  className="btn btn-ghost text-sm py-1.5"
                 >
                   Cancel
                 </button>

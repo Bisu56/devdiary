@@ -14,28 +14,31 @@ function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#020817] border-b border-slate-800">
-      <div className="max-w-4xl mx-auto h-full px-5 flex items-center justify-between">
-        <Link to="/" className="text-lg font-bold text-cyan-400">
-          DevDiary
+    <header className="sticky top-0 left-0 right-0 z-50 h-16 bg-white border-b border-slate-200 shadow-sm">
+      <div className="w-full px-6 h-full flex items-center justify-between">
+        <Link to="/" className="text-xl font-semibold text-slate-900 tracking-tight">
+          Dev<span className="text-blue-600">Diary</span>
         </Link>
         
-        <div className="flex items-center gap-4">
+        <nav className="flex items-center gap-5">
           {isAuthenticated ? (
             <>
-              <Link to="/create" className="text-sm text-slate-400 hover:text-white">Write</Link>
-              <button onClick={logout} className="text-sm text-slate-400 hover:text-white">Logout</button>
-              <div className="w-7 h-7 rounded-full bg-cyan-600 flex items-center justify-center text-white text-xs font-bold">
+              <Link to="/create" className="text-sm font-medium text-slate-600 hover:text-slate-900">Write</Link>
+              {user?.role === 'admin' && (
+                <Link to="/admin" className="text-sm font-medium text-slate-600 hover:text-slate-900">Dashboard</Link>
+              )}
+              <button onClick={logout} className="text-sm font-medium text-slate-600 hover:text-slate-900">Logout</button>
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-slate-400 hover:text-white">Login</Link>
-              <Link to="/register" className="text-sm bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-md">Sign Up</Link>
+              <Link to="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900">Log in</Link>
+              <Link to="/register" className="px-4 py-2 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors text-sm">Sign up</Link>
             </>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
@@ -43,9 +46,9 @@ function Navbar() {
 
 function Footer() {
   return (
-    <footer className="border-t border-slate-800 py-6 mt-auto">
-      <div className="max-w-4xl mx-auto px-5 text-center text-xs text-slate-600">
-        DevDiary © 2024
+    <footer className="border-t border-slate-200 py-8 mt-auto">
+      <div className="w-full px-6 text-center text-sm text-slate-500">
+        DevDiary — A modern blog platform
       </div>
     </footer>
   );
@@ -54,7 +57,7 @@ function Footer() {
 function Loading() {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-5 h-5 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
+      <div className="w-6 h-6 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
     </div>
   );
 }
@@ -64,9 +67,9 @@ function App() {
     <AuthProvider>
       <SocketProvider>
         <Router>
-          <div className="min-h-screen bg-[#020817] text-slate-200 flex flex-col">
+          <div className="min-h-screen bg-slate-50 flex flex-col">
             <Navbar />
-            <main className="flex-1 pt-14">
+            <main className="flex-1 w-full" style={{ marginTop: '4rem' }}>
               <Suspense fallback={<Loading />}>
                 <Routes>
                   <Route path="/" element={<Home />} />

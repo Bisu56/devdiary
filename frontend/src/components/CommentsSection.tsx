@@ -59,33 +59,35 @@ const CommentsSection = ({ postId }: Props) => {
   const topLevelComments = comments.filter(c => !c.parentComment);
 
   return (
-    <div className="mt-12 border-t border-slate-800 pt-10">
-      <h2 className="text-xl font-bold text-white mb-6">Comments ({comments.length})</h2>
+    <div>
+      <h2 className="text-lg font-semibold text-slate-900 mb-6">
+        Comments ({comments.length})
+      </h2>
 
       {isAuthenticated ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="mb-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="mb-8">
           <textarea
             {...register('content')}
-            className="w-full p-4 border border-slate-700 rounded-xl bg-slate-900 text-white"
+            className="input resize-none"
             placeholder="Write a comment..."
             rows={4}
           />
-          {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+          {errors.content && <p className="error-text">{errors.content.message}</p>}
           <button 
             type="submit"
-            className="mt-3 bg-cyan-600 text-white px-8 py-3 rounded-lg hover:bg-cyan-500"
+            className="btn btn-primary mt-3"
           >
             Post Comment
           </button>
         </form>
       ) : (
-        <p className="mb-8 text-slate-500">Login to join the discussion</p>
+        <p className="text-slate-500 mb-6">Log in to join the discussion</p>
       )}
 
       {loading ? (
         <p className="text-slate-500">Loading comments...</p>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-4">
           {topLevelComments.map((comment) => (
             <CommentItem 
               key={comment._id} 
@@ -94,7 +96,9 @@ const CommentsSection = ({ postId }: Props) => {
               onReplyAdded={fetchComments} 
             />
           ))}
-          {topLevelComments.length === 0 && <p className="text-slate-500">No comments yet. Be the first!</p>}
+          {topLevelComments.length === 0 && (
+            <p className="text-slate-500">No comments yet. Be the first!</p>
+          )}
         </div>
       )}
     </div>

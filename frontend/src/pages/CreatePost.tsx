@@ -39,40 +39,44 @@ const CreatePost = () => {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex items-start justify-center min-h-[calc(100vh-8rem)] py-10">
-      <div className="w-full max-w-xl">
-        <h1 className="text-xl font-bold text-white mb-6 text-center">New Post</h1>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-3xl mx-auto px-6 py-12">
+      <h1 className="text-2xl font-bold text-slate-900 mb-8">New Post</h1>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="label">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-            placeholder="Post title"
+            className="input"
+            placeholder="Enter post title"
             required
           />
-          
+        </div>
+        
+        <div>
+          <label className="label">Content</label>
           <RichTextEditor content={content} onChange={setContent} />
-          
-          <div className="flex justify-center gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="px-4 py-2 text-slate-400 hover:text-white"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-md disabled:opacity-50"
-            >
-              {saving ? 'Publishing...' : 'Publish'}
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+        
+        <div className="flex items-center gap-3 pt-4">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="btn btn-ghost"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="btn btn-primary"
+          >
+            {saving ? 'Publishing...' : 'Publish'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

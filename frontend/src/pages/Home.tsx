@@ -25,48 +25,57 @@ const Home = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="w-5 h-5 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
+        <div className="w-6 h-6 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-xl mx-auto px-5 py-10">
-      <div className="text-center mb-10">
-        <h1 className="text-2xl font-bold text-white mb-1">
-          Your thoughts, <span className="text-cyan-400">architected.</span>
+    <div className="w-full px-6 py-12 max-w-3xl mx-auto">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold text-slate-900 mb-3">
+          Welcome to DevDiary
         </h1>
-        <p className="text-slate-500 text-sm">Share your knowledge</p>
+        <p className="text-slate-500">Thoughts, tutorials, and insights</p>
       </div>
 
-      <div className="mb-6">
-        <h2 className="text-xs font-medium text-slate-500 mb-4">Recent Posts</h2>
-        
-        {posts.length === 0 ? (
-          <div className="text-center py-10 bg-slate-900/30 rounded-lg border border-slate-800">
-            <p className="text-slate-500 mb-4">No posts yet</p>
-            <Link to="/create" className="text-sm bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-md">
-              Write First Post
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {posts.map(post => (
-              <Link key={post._id} to={`/post/${post.slug}`} className="block">
-                <article className="p-4 bg-slate-900 border border-slate-800 rounded-lg hover:border-cyan-500/40 transition-colors">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs text-cyan-500">
-                      {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+      {posts.length === 0 ? (
+        <div className="card text-center py-12">
+          <p className="text-slate-500 mb-4">No posts yet. Be the first to write!</p>
+          <Link to="/create" className="btn btn-primary">
+            Write a Post
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {posts.map(post => (
+            <Link key={post._id} to={`/post/${post.slug}`} className="block group">
+              <article className="card p-6 hover:shadow-md transition-shadow duration-200">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-sm text-slate-400">
+                    {new Date(post.createdAt).toLocaleDateString('en-US', { 
+                      month: 'short', 
+                      day: 'numeric', 
+                      year: 'numeric' 
+                    })}
+                  </span>
+                  {post.tags?.length > 0 && (
+                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                      {post.tags[0]}
                     </span>
-                  </div>
-                  <h3 className="text-sm font-medium text-white">{post.title}</h3>
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{stripHtml(post.content).slice(0, 80)}</p>
-                </article>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+                  )}
+                </div>
+                <h2 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  {post.title}
+                </h2>
+                <p className="text-slate-500 text-sm line-clamp-2">
+                  {stripHtml(post.content).slice(0, 150)}
+                </p>
+              </article>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

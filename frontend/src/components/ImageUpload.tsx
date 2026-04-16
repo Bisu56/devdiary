@@ -35,7 +35,7 @@ const ImageUpload = ({ onUpload }: Props) => {
   };
 
   return (
-    <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-400 hover:text-white hover:border-slate-600 cursor-pointer">
+    <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-300 rounded-md text-sm text-slate-600 hover:bg-slate-50 cursor-pointer">
       {uploading ? 'Uploading...' : 'Upload Image'}
       <input
         type="file"

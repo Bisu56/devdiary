@@ -6,8 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const registerSchema = z.object({
-  name: z.string().min(2, 'Name required'),
-  email: z.string().email('Invalid email'),
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
@@ -17,7 +17,7 @@ const Register = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors }, setError } = useForm<RegisterForm>({
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
   });
 
@@ -27,51 +27,65 @@ const Register = () => {
       login(res.data.token, res.data.user);
       navigate('/');
     } catch (error: any) {
-      setError('root', { message: error.response?.data?.message || 'Registration failed' });
+      alert(error.response?.data?.message || 'Registration failed');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="w-full max-w-xs">
-        <div className="text-center mb-6">
-          <Link to="/" className="text-xl font-bold text-cyan-400">DevDiary</Link>
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <Link to="/" className="text-2xl font-bold text-slate-900">
+            Dev<span className="text-blue-600">Diary</span>
+          </Link>
         </div>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
-            type="text"
-            {...register('name')}
-            className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-md text-white text-sm focus:border-cyan-500 focus:outline-none"
-            placeholder="Name"
-          />
-          {errors.name && <p className="text-red-400 text-xs">{errors.name.message}</p>}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-8">
+          <h1 className="text-xl font-semibold text-slate-900 mb-6">Create account</h1>
           
-          <input
-            type="email"
-            {...register('email')}
-            className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-md text-white text-sm focus:border-cyan-500 focus:outline-none"
-            placeholder="Email"
-          />
-          {errors.email && <p className="text-red-400 text-xs">{errors.email.message}</p>}
-          
-          <input
-            type="password"
-            {...register('password')}
-            className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-md text-white text-sm focus:border-cyan-500 focus:outline-none"
-            placeholder="Password"
-          />
-          {errors.password && <p className="text-red-400 text-xs">{errors.password.message}</p>}
-          
-          {errors.root && <p className="text-red-400 text-xs">{errors.root.message}</p>}
-          
-          <button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-2.5 rounded-md text-sm">
-            Sign Up
-          </button>
-        </form>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Name</label>
+              <input
+                type="text"
+                {...register('name')}
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Your name"
+              />
+              {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+              <input
+                type="email"
+                {...register('email')}
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="you@example.com"
+              />
+              {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>}
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+              <input
+                type="password"
+                {...register('password')}
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="••••••••"
+              />
+              {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
+            </div>
+            
+            <button type="submit" className="w-full px-4 py-3 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+              Sign up
+            </button>
+          </form>
+        </div>
         
-        <p className="mt-4 text-center text-xs text-slate-500">
-          <Link to="/login" className="text-cyan-400">Already have account</Link>
+        <p className="mt-6 text-center text-sm text-slate-500">
+          Already have an account?{' '}
+          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">Log in</Link>
         </p>
       </div>
     </div>
