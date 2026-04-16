@@ -1,23 +1,18 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 interface Props {
-  onUploadComplete: (url: string) => void;
+  onUpload: (url: string) => void;
 }
 
-const ImageUpload = ({ onUploadComplete }: Props) => {
+const ImageUpload = ({ onUpload }: Props) => {
   const [uploading, setUploading] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { token } = useAuth();
 
-  const handleFile = async (file: File) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
-      return;
-    }
 
     setUploading(true);
     const formData = new FormData();
@@ -30,49 +25,26 @@ const ImageUpload = ({ onUploadComplete }: Props) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      onUploadComplete(res.data.url);
+      onUpload(res.data.url);
     } catch (error) {
-      alert('Failed to upload image');
+      console.error(error);
+      alert('Upload failed');
     } finally {
       setUploading(false);
     }
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragActive(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFile(file);
-  };
-
   return (
-    <div
-      className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
-        dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-      }`}
-      onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-      onDragLeave={() => setDragActive(false)}
-      onDrop={handleDrop}
-      onClick={() => fileInputRef.current?.click()}
-    >
+    <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-400 hover:text-white hover:border-slate-600 cursor-pointer">
+      {uploading ? 'Uploading...' : 'Upload Image'}
       <input
-        ref={fileInputRef}
         type="file"
         accept="image/*"
+        onChange={handleFileChange}
         className="hidden"
-        onChange={handleChange}
+        disabled={uploading}
       />
-      {uploading ? (
-        <p className="text-gray-500">Uploading...</p>
-      ) : (
-        <p className="text-gray-500">Click or drag image here to upload</p>
-      )}
-    </div>
+    </label>
   );
 };
 

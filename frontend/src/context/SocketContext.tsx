@@ -1,17 +1,34 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface SocketContextType {
   socket: Socket | null;
+  isConnected: boolean;
 }
 
-const SocketContext = createContext<SocketContextType>({ socket: null });
+const SocketContext = createContext<SocketContextType>({
+  socket: null,
+  isConnected: false,
+});
 
-export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
+export const useSocket = () => useContext(SocketContext);
+
+export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const newSocket = io('http://localhost:5000');
+
+    newSocket.on('connect', () => {
+      setIsConnected(true);
+    });
+
+    newSocket.on('disconnect', () => {
+      setIsConnected(false);
+    });
+
     setSocket(newSocket);
 
     return () => {
@@ -20,10 +37,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, isConnected }}>
       {children}
     </SocketContext.Provider>
   );
 };
-
-export const useSocket = () => useContext(SocketContext);

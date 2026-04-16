@@ -24,7 +24,7 @@ const AdminDashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/posts', {
+      const res = await axios.get('http://localhost:5000/api/posts/all', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(res.data);

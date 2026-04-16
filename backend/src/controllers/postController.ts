@@ -52,3 +52,18 @@ export const createPost = async (req: AuthRequest, res: Response) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const deletePost = async (req: AuthRequest, res: Response) => {
+  try {
+    const post = await Post.findOneAndDelete({ 
+      _id: req.params.id,
+      author: req.user!.id 
+    });
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json({ message: 'Post deleted' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

@@ -3,6 +3,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import ImageUpload from './ImageUpload';
 
 interface Props {
   content: string;
@@ -38,8 +39,7 @@ const RichTextEditor = ({ content, onChange }: Props) => {
     return null;
   }
 
-  const addImage = () => {
-    const url = window.prompt('Enter image URL:');
+  const addImage = (url: string) => {
     if (url) {
       editor.chain().focus().setImage({ src: url }).run();
     }
@@ -111,13 +111,7 @@ const RichTextEditor = ({ content, onChange }: Props) => {
         >
           {'</>'}
         </button>
-        <button
-          type="button"
-          onClick={addImage}
-          className="p-2 rounded text-sm text-slate-400 hover:text-white"
-        >
-          Image
-        </button>
+        <ImageUpload onUpload={addImage} />
       </div>
       <EditorContent editor={editor} />
     </div>

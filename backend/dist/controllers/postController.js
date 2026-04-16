@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPost = exports.getPostBySlug = exports.getAllPosts = void 0;
+exports.deletePost = exports.createPost = exports.getPostBySlug = exports.getAllPosts = void 0;
 const Post_1 = __importDefault(require("../models/Post"));
 const getAllPosts = async (req, res) => {
     try {
@@ -56,3 +56,19 @@ const createPost = async (req, res) => {
     }
 };
 exports.createPost = createPost;
+const deletePost = async (req, res) => {
+    try {
+        const post = await Post_1.default.findOneAndDelete({
+            _id: req.params.id,
+            author: req.user.id
+        });
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        res.json({ message: 'Post deleted' });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+exports.deletePost = deletePost;
