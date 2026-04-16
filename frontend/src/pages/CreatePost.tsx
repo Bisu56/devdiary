@@ -7,6 +7,7 @@ import RichTextEditor from '../components/RichTextEditor';
 const CreatePost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('<p></p>');
+  const [featuredImage, setFeaturedImage] = useState('');
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
   const { token, isAuthenticated } = useAuth();
@@ -24,6 +25,7 @@ const CreatePost = () => {
       await axios.post('http://localhost:5000/api/posts', {
         title,
         content,
+        featuredImage: featuredImage || undefined,
         published: true
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -44,19 +46,40 @@ const CreatePost = () => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="label">Title</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="input"
+            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter post title"
             required
           />
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Featured Image URL</label>
+          <input
+            type="text"
+            value={featuredImage}
+            onChange={(e) => setFeaturedImage(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="https://example.com/image.jpg"
+          />
+          {featuredImage && (
+            <img 
+              src={featuredImage} 
+              alt="Preview" 
+              className="mt-3 w-full h-48 object-cover rounded-lg"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          )}
+        </div>
         
         <div>
-          <label className="label">Content</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">Content</label>
           <RichTextEditor content={content} onChange={setContent} />
         </div>
         
@@ -64,14 +87,14 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="btn btn-ghost"
+            className="px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="btn btn-primary"
+            className="px-4 py-2 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
             {saving ? 'Publishing...' : 'Publish'}
           </button>

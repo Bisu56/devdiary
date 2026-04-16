@@ -44,6 +44,16 @@ const PostDetail = () => {
       </Link>
       
       <article>
+        {post.featuredImage && (
+          <img 
+            src={post.featuredImage.startsWith('http') ? post.featuredImage : `http://localhost:5000${post.featuredImage}`}
+            alt={post.title}
+            className="w-full h-64 object-cover rounded-lg mb-8"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        )}
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-4">{post.title}</h1>
           <div className="flex items-center gap-3 text-sm text-slate-500">

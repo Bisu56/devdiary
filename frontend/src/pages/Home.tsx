@@ -50,27 +50,39 @@ const Home = () => {
         <div className="space-y-6">
           {posts.map(post => (
             <Link key={post._id} to={`/post/${post.slug}`} className="block group">
-              <article className="card p-6 hover:shadow-md transition-shadow duration-200">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-sm text-slate-400">
-                    {new Date(post.createdAt).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      day: 'numeric', 
-                      year: 'numeric' 
-                    })}
-                  </span>
-                  {post.tags?.length > 0 && (
-                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
-                      {post.tags[0]}
+              <article className="card overflow-hidden hover:shadow-md transition-shadow duration-200">
+                {post.featuredImage && (
+                  <img 
+                    src={post.featuredImage.startsWith('http') ? post.featuredImage : `http://localhost:5000${post.featuredImage}`}
+                    alt={post.title}
+                    className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                )}
+                <div className="p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-sm text-slate-400">
+                      {new Date(post.createdAt).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
                     </span>
-                  )}
+                    {post.tags?.length > 0 && (
+                      <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                        {post.tags[0]}
+                      </span>
+                    )}
+                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    {post.title}
+                  </h2>
+                  <p className="text-slate-500 text-sm line-clamp-2">
+                    {stripHtml(post.content).slice(0, 150)}
+                  </p>
                 </div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  {post.title}
-                </h2>
-                <p className="text-slate-500 text-sm line-clamp-2">
-                  {stripHtml(post.content).slice(0, 150)}
-                </p>
               </article>
             </Link>
           ))}
